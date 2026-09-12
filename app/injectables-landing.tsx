@@ -1537,6 +1537,7 @@ export default function InjectablesLanding() {
             noValidate
           >
             <div className="sticky-form-heading">
+              <p>Personal consultation</p>
               <h2>Share your details to get started.</h2>
             </div>
             <div className="field-group">
