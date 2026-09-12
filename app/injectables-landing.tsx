@@ -8,7 +8,6 @@ import {
   ChevronDown,
   Clock3,
   MapPin,
-  MessageCircle,
   Phone,
   ShieldCheck,
   Sparkles,
@@ -846,6 +845,7 @@ export default function InjectablesLanding() {
                 fill
                 unoptimized
                 priority
+                loading="eager"
                 sizes="100vw"
               />
             </div>
@@ -1109,6 +1109,13 @@ export default function InjectablesLanding() {
               treatment planning
             </span>
           </div>
+          <button
+            type="button"
+            className="primary-button"
+            onClick={openBookingModal}
+          >
+            Book a consultation <ArrowRight size={18} aria-hidden="true" />
+          </button>
         </div>
       </section>
 
@@ -1225,13 +1232,13 @@ export default function InjectablesLanding() {
               plan. We assess your anatomy, movement and goals before
               recommending the right approach.
             </p>
-            <a
+            <button
+              type="button"
               className="primary-button"
-              href="#consultation"
-              onClick={handleConsultationLinkClick}
+              onClick={openBookingModal}
             >
               Discuss a concern <ArrowRight size={18} aria-hidden="true" />
-            </a>
+            </button>
           </div>
           <div className="areas-list" aria-label="Concerns addressed">
             {concernsList.map((area, index) => (
@@ -1399,16 +1406,13 @@ export default function InjectablesLanding() {
             package.
           </p>
           <div className="cta-actions">
-            <a
+            <button
+              type="button"
               className="primary-button"
-              href="#consultation"
-              onClick={handleConsultationLinkClick}
+              onClick={openBookingModal}
             >
               Request a consultation <ArrowRight size={18} aria-hidden="true" />
-            </a>
-            <a className="secondary-button" href={clinicPhoneHref}>
-              <Phone size={18} aria-hidden="true" /> Call {clinicPhoneDisplay}
-            </a>
+            </button>
           </div>
         </div>
       </section>
@@ -1446,18 +1450,6 @@ export default function InjectablesLanding() {
               <Clock3 size={22} aria-hidden="true" />
               <h3>Clinic hours</h3>
               <p>Monday to Saturday, 10:00 AM to 7:00 PM. Sunday closed.</p>
-            </div>
-            <div
-              data-reveal="rise"
-              style={{ "--reveal-delay": "160ms" } as CSSProperties}
-            >
-              <MessageCircle size={22} aria-hidden="true" />
-              <h3>Speak with the team</h3>
-              <p>
-                {clinicPhoneDisplay}
-                <br />
-                support@drnishitaranka.com
-              </p>
             </div>
           </div>
         </div>
