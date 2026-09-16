@@ -291,6 +291,7 @@ summary:focus-visible {
   background: var(--mauve-deep);
   color: var(--white);
   width: fit-content;
+  max-width: 500px;
 }
 
 .hero-offer svg {
@@ -316,10 +317,10 @@ summary:focus-visible {
 }
 
 .hero-offer-value {
-  font-size: 30px;
-  font-weight: 800;
-  line-height: 1.05;
-  white-space: nowrap;
+  font-family: var(--font-display), Marcellus, Georgia, serif;
+  font-size: 26px;
+  font-weight: 400;
+  line-height: 1.15;
 }
 
 .hero h1 {
@@ -1290,6 +1291,10 @@ summary:focus-visible {
   margin: 32px 0 0;
   color: #a99fa4;
   font-size: 13px;
+}
+
+.process-section .medical-note {
+  text-align: center;
 }
 
 .areas-section {
@@ -3071,7 +3076,7 @@ summary:focus-visible {
 /* ---------------------------------------------------------------- */
 
 .compare-table-wrap {
-  max-width: 900px;
+  max-width: 1100px;
   margin: 56px auto 0;
 }
 

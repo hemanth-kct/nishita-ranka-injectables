@@ -8,7 +8,6 @@ import {
   ChevronDown,
   Clock3,
   MapPin,
-  Phone,
   ShieldCheck,
   Sparkles,
   Star,
@@ -29,8 +28,6 @@ import {
 
 let exitIntentShown = false;
 
-const clinicPhoneDisplay = "+91 93812 19187";
-const clinicPhoneHref = "tel:+919381219187";
 const leadApiUrl = "https://api.drnishitaranka.in/v1/leads";
 
 const primaryConcerns = [
@@ -420,6 +417,7 @@ export default function InjectablesLanding() {
   const [reviewsPaused, setReviewsPaused] = useState(false);
   const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(null);
   const [isBookingModalOpen, setIsBookingModalOpen] = useState(false);
+  const [bookingModalShowConcern, setBookingModalShowConcern] = useState(true);
   const stickyFormRef = useRef<HTMLElement>(null);
   const stickyCloseButtonRef = useRef<HTMLButtonElement>(null);
   const mobileCtaRef = useRef<HTMLButtonElement>(null);
@@ -504,7 +502,10 @@ export default function InjectablesLanding() {
     [openMobileConsultation],
   );
 
-  const openBookingModal = useCallback(() => {
+  const openBookingModal = useCallback((showConcernField: boolean = true) => {
+    setBookingModalShowConcern(showConcernField);
+    setFormValues({ name: "", phone: "", email: "", area: "" });
+    setErrors({});
     setIsBookingModalOpen(true);
   }, []);
 
@@ -554,7 +555,7 @@ export default function InjectablesLanding() {
       if (event.clientY > 0) return;
 
       exitIntentShown = true;
-      openBookingModal();
+      openBookingModal(false);
     }
 
     document.addEventListener("mouseout", handleMouseOut);
@@ -692,6 +693,8 @@ export default function InjectablesLanding() {
     event.preventDefault();
     if (isSubmitting) return;
 
+    const fieldPrefix = event.currentTarget.dataset.formPrefix ?? "";
+    const isExitIntentModal = fieldPrefix === "booking-" && !bookingModalShowConcern;
     const form = new FormData(event.currentTarget);
     const name = String(form.get("name") ?? "").trim();
     const phone = String(form.get("phone") ?? "").trim();
@@ -704,12 +707,11 @@ export default function InjectablesLanding() {
     if (digits.length < 10 || digits.length > 13) {
       nextErrors.phone = "Please enter a valid mobile number.";
     }
-    if (!area) nextErrors.area = "Please choose a concern.";
+    if (!area && !isExitIntentModal) nextErrors.area = "Please choose a concern.";
 
     setErrors(nextErrors);
     if (Object.keys(nextErrors).length > 0) {
       const firstInvalidField = Object.keys(nextErrors)[0];
-      const fieldPrefix = event.currentTarget.dataset.formPrefix ?? "";
       window.requestAnimationFrame(() => {
         document.getElementById(fieldPrefix + firstInvalidField)?.focus();
       });
@@ -822,14 +824,6 @@ export default function InjectablesLanding() {
           </a>
           <div className="header-actions">
             <span className="header-location">Banjara Hills, Hyderabad</span>
-            <a
-              className="call-link"
-              href={clinicPhoneHref}
-              aria-label={"Call clinic on " + clinicPhoneDisplay}
-            >
-              <Phone size={18} aria-hidden="true" />
-              <span>Call clinic</span>
-            </a>
           </div>
         </div>
       </header>
@@ -838,16 +832,16 @@ export default function InjectablesLanding() {
         <div className="hero-inner">
           <div className="hero-copy">
             <div className="hero-media-frame">
-              <Image
-                className="hero-media"
-                src="/brand/clinic.jpg"
-                alt="Consultation room at Dr. Nishita's Clinic for injectable treatment planning"
-                fill
-                unoptimized
-                priority
-                loading="eager"
-                sizes="100vw"
-              />
+              <picture className="hero-media-picture">
+                <source media="(max-width: 560px)" srcSet="/brand/hero-mobile.png" />
+                <img
+                  className="hero-media"
+                  src="/brand/hero-desktop.png"
+                  alt="Doctor administering a facial injectable treatment at Dr. Nishita's Clinic"
+                  loading="eager"
+                  fetchPriority="high"
+                />
+              </picture>
             </div>
             <div
               className="rating-line hero-reveal"
@@ -883,7 +877,7 @@ export default function InjectablesLanding() {
               <span className="hero-offer-copy">
                 <span className="hero-offer-kicker">New patient privilege</span>
                 <span className="hero-offer-value">
-                  Complimentary IV wellness benefit with eligible treatment plans*
+                  Complimentary IV wellness benefit with eligible treatment plans
                 </span>
               </span>
             </div>
@@ -1112,7 +1106,7 @@ export default function InjectablesLanding() {
           <button
             type="button"
             className="primary-button"
-            onClick={openBookingModal}
+            onClick={() => openBookingModal(true)}
           >
             Book a consultation <ArrowRight size={18} aria-hidden="true" />
           </button>
@@ -1235,7 +1229,7 @@ export default function InjectablesLanding() {
             <button
               type="button"
               className="primary-button"
-              onClick={openBookingModal}
+              onClick={() => openBookingModal(true)}
             >
               Discuss a concern <ArrowRight size={18} aria-hidden="true" />
             </button>
@@ -1409,7 +1403,7 @@ export default function InjectablesLanding() {
             <button
               type="button"
               className="primary-button"
-              onClick={openBookingModal}
+              onClick={() => openBookingModal(true)}
             >
               Request a consultation <ArrowRight size={18} aria-hidden="true" />
             </button>
@@ -1710,7 +1704,7 @@ export default function InjectablesLanding() {
                   </span>
                 )}
               </div>
-              <div className="field-group">
+              {bookingModalShowConcern && (
                 <ConcernDropdown
                   id="booking-area"
                   label="Primary concern"
@@ -1720,7 +1714,7 @@ export default function InjectablesLanding() {
                   error={errors.area}
                   onChange={(value) => updateField("area", value)}
                 />
-              </div>
+              )}
               <div className="form-submit">
                 <button
                   type="submit"
