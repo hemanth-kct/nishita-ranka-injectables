@@ -3168,6 +3168,7 @@ summary:focus-visible {
 .terms-section h2 {
   margin-bottom: 24px;
   font-size: 24px;
+  text-align: center;
 }
 
 .terms-list {
