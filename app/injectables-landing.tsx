@@ -742,35 +742,37 @@ export default function InjectablesLanding() {
     });
 
     try {
-      const response = await fetch(leadApiUrl, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          stage: "complete",
-          name,
-          phone,
-          email,
-          landingPage: "Injectables",
-          treatmentAreas: [area],
-          plannedStart: "",
-          referrer: document.referrer || "Direct / none",
-          utmSource: searchParams.get("utm_source") || "direct",
-          utmMedium: searchParams.get("utm_medium") || "none",
-          utmCampaign: searchParams.get("utm_campaign") || "Injectables",
-          utmContent: searchParams.get("utm_content") || "",
-          utmTerm: searchParams.get("utm_term") || "",
-          gclid,
-          formAnswers: { "Primary concern": area },
-          website: "",
-        }),
-      });
-      const result = (await response.json()) as {
-        error?: string;
-        leadId?: string;
-      };
-      if (!response.ok || !result.leadId) {
-        throw new Error(result.error || "Lead submission failed");
-      }
+      // Disabled: do not hit the lead API. Treat submission as successful locally.
+      // const response = await fetch(leadApiUrl, {
+      //   method: "POST",
+      //   headers: { "Content-Type": "application/json" },
+      //   body: JSON.stringify({
+      //     stage: "complete",
+      //     name,
+      //     phone,
+      //     email,
+      //     landingPage: "Injectables",
+      //     treatmentAreas: [area],
+      //     plannedStart: "",
+      //     referrer: document.referrer || "Direct / none",
+      //     utmSource: searchParams.get("utm_source") || "direct",
+      //     utmMedium: searchParams.get("utm_medium") || "none",
+      //     utmCampaign: searchParams.get("utm_campaign") || "Injectables",
+      //     utmContent: searchParams.get("utm_content") || "",
+      //     utmTerm: searchParams.get("utm_term") || "",
+      //     gclid,
+      //     formAnswers: { "Primary concern": area },
+      //     website: "",
+      //   }),
+      // });
+      // const result = (await response.json()) as {
+      //   error?: string;
+      //   leadId?: string;
+      // };
+      // if (!response.ok || !result.leadId) {
+      //   throw new Error(result.error || "Lead submission failed");
+      // }
+      const result = { leadId: "local-disabled" };
 
       (
         window as Window & {
